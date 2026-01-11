@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     description: DEFAULT_DESC,
     images: [
       {
-        url: "/images/logo.jpg",
+        url: "/logo.webp",
         width: 1200,
         height: 630,
         alt: "Soleado Moments – boutique white soft play hire",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: DEFAULT_TITLE,
     description: DEFAULT_DESC,
-    images: ["/images/logo.jpg"],
+    images: ["/logo.webp"],
   },
 
   // Optional but recommended
