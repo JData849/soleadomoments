@@ -29,6 +29,10 @@ function cx(...parts: Array<string | undefined | false | null>) {
   return parts.filter(Boolean).join(" ");
 }
 
+function isAnchorProps(props: ButtonProps): props is AnchorProps {
+  return typeof (props as AnchorProps).href === "string";
+}
+
 function isExternalHref(href: string) {
   return (
     href.startsWith("http://") ||
@@ -54,7 +58,7 @@ export function Button(props: ButtonProps) {
       : "bg-ink text-paper";
 
   // LINK MODE
-  if ("href" in props) {
+  if (isAnchorProps(props)) {
     const { href, className, children, onClick, target, rel } = props;
 
     // Hash link smooth scroll (with offset for sticky header)

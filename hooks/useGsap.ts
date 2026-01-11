@@ -5,7 +5,7 @@ import { useLayoutEffect } from "react";
 import { gsap } from "@/lib/gsap";
 
 export function useGsap(
-  scope: React.RefObject<HTMLElement>,
+  scope: React.RefObject<HTMLElement | null>,
   fn: (api: { ctx: gsap.Context; reducedMotion: boolean }) => void
 ) {
   useLayoutEffect(() => {
