@@ -6,7 +6,7 @@ import { Button } from "./Button";
 import { registerGSAP, gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGsap } from "@/hooks/useGsap";
 
-type EnquiryProps = {
+export type EnquiryProps = {
   heading?: string;        // e.g. "Check availability in Leigh"
   presetArea?: string;     // e.g. "Leigh"
   sourceLabel?: string;    // e.g. "Location page: Leigh"
@@ -66,14 +66,14 @@ function buildEmailUrl(opts: {
   return `mailto:${opts.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-export function Enquiry({
+export const Enquiry = ({
   heading = "Check availability",
   presetArea = "",
   sourceLabel = "",
   whatsappNumber = "447848147550",
   emailTo = "info@soleadomoments.co.uk",
   phoneNumber = "+447848147550",
-}: EnquiryProps) {
+}: EnquiryProps) => {
   const ref = useRef<HTMLElement>(null);
 
   useGsap(ref, ({ reducedMotion }) => {
@@ -242,4 +242,6 @@ export function Enquiry({
       </Container>
     </section>
   );
-}
+};
+
+export default Enquiry;
