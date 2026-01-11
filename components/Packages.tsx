@@ -32,7 +32,7 @@ const PACKAGES: Package[] = [
       "Teepee",
     ],
     note: "Ideal for around 4–6 little ones.",
-    featured: true,
+    featured: false,
     badge: "Budget friendly",
   },
   {
@@ -66,6 +66,7 @@ const PACKAGES: Package[] = [
     ],
     note: "Best for 8–10 children and fully customisable to your theme.",
     badge: "Full experience",
+    featured: false,
   },
 ];
 

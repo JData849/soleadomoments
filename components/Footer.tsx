@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "./Container";
+import { SocialLinks } from "./SocialLinks";
 
 export function Footer() {
   return (
@@ -52,7 +53,12 @@ export function Footer() {
             </div>
           </div>
         </div>
-
+        
+<SocialLinks
+  size="sm"
+  instagram="https://www.instagram.com/soleadomomentsevents/"
+  facebook="https://facebook.com/profile.php?id=61582782087780"
+/>
         <div className="mt-10 flex flex-col gap-2 border-t border-line/70 pt-6 text-xs text-ink/75 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Soleado Moments.</p>
           <p>Built by Abel &amp; Co.</p>

@@ -18,6 +18,7 @@ export function Navbar() {
   const isHome = pathname === "/";
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
 
   const linkHref = (hash: string) => (isHome ? hash : `/${hash}`);
 
@@ -31,7 +32,8 @@ export function Navbar() {
     if (!open) return;
     const onClick = (e: MouseEvent) => {
       const t = e.target as Node;
-      if (panelRef.current && !panelRef.current.contains(t)) setOpen(false);
+      if (panelRef.current?.contains(t) || toggleRef.current?.contains(t)) return;
+      setOpen(false);
     };
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
@@ -68,6 +70,7 @@ export function Navbar() {
             <Button href={linkHref("#enquiry")}>Quote</Button>
 
             <button
+              ref={toggleRef}
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-paper shadow-soft transition hover:-translate-y-px hover:shadow-float"
               aria-label={open ? "Close menu" : "Open menu"}
