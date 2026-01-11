@@ -6,11 +6,23 @@ import { Button } from "./Button";
 import { registerGSAP, gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGsap } from "@/hooks/useGsap";
 
-const WHATSAPP_NUMBER = "447848147550"; // replace (no +, no spaces)
-const EMAIL_TO = "info@soleadomoments.co.uk"; // replace with your real inbox
+type EnquiryProps = {
+  heading?: string;        // e.g. "Check availability in Leigh"
+  presetArea?: string;     // e.g. "Leigh"
+  sourceLabel?: string;    // e.g. "Location page: Leigh"
+  whatsappNumber?: string; // e.g. "447848147550" (no +, no spaces)
+  emailTo?: string;        // e.g. "info@soleadomoments.co.uk"
+  phoneNumber?: string;    // e.g. "+447848147550"
+};
 
-function buildMessage(opts: { name: string; date: string; area: string; details: string }) {
-  const { name, date, area, details } = opts;
+function buildMessage(opts: {
+  name: string;
+  date: string;
+  area: string;
+  details: string;
+  sourceLabel?: string;
+}) {
+  const { name, date, area, details, sourceLabel } = opts;
 
   return [
     "Hi Soleado Moments 👋",
@@ -20,9 +32,13 @@ function buildMessage(opts: { name: string; date: string; area: string; details:
     `• Event date: ${date}`,
     `• Postcode/area: ${area}`,
     `• Package/theme/add-ons: ${details}`,
+    sourceLabel ? "" : null,
+    sourceLabel ? `• Source: ${sourceLabel}` : null,
     "",
     "Please let me know availability and the next steps. Thank you!",
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function buildWhatsAppUrl(opts: {
@@ -31,6 +47,7 @@ function buildWhatsAppUrl(opts: {
   date: string;
   area: string;
   details: string;
+  sourceLabel?: string;
 }) {
   const message = buildMessage(opts);
   return `https://wa.me/${opts.number}?text=${encodeURIComponent(message)}`;
@@ -42,13 +59,21 @@ function buildEmailUrl(opts: {
   date: string;
   area: string;
   details: string;
+  sourceLabel?: string;
 }) {
   const body = buildMessage(opts);
   const subject = `Availability enquiry – ${opts.date} – ${opts.area}`;
   return `mailto:${opts.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-export function Enquiry() {
+export function Enquiry({
+  heading = "Check availability",
+  presetArea = "",
+  sourceLabel = "",
+  whatsappNumber = "447848147550",
+  emailTo = "info@soleadomoments.co.uk",
+  phoneNumber = "+447848147550",
+}: EnquiryProps) {
   const ref = useRef<HTMLElement>(null);
 
   useGsap(ref, ({ reducedMotion }) => {
@@ -98,26 +123,26 @@ export function Enquiry() {
         >
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div data-enq="left">
-              <h2 className="text-3xl text-ink">Check availability</h2>
+              <h2 className="text-3xl text-ink">{heading}</h2>
               <p className="mt-3 text-ink/80">
                 Tell us your date, area, package and theme. We’ll confirm availability and reply with delivery details.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <div data-enq="cta">
-                  <Button href={`https://wa.me/${WHATSAPP_NUMBER}`} className="bg-ink text-paper">
+                  <Button href={`https://wa.me/${whatsappNumber}`} className="bg-ink text-paper">
                     WhatsApp us
                   </Button>
                 </div>
 
                 <div data-enq="cta">
-                  <Button href={`mailto:${EMAIL_TO}`} variant="ghost">
+                  <Button href={`mailto:${emailTo}`} variant="ghost">
                     Email
                   </Button>
                 </div>
 
                 <div data-enq="cta">
-                  <Button href="tel:+447848147550" variant="ghost">
+                  <Button href={`tel:${phoneNumber}`} variant="ghost">
                     Call
                   </Button>
                 </div>
@@ -140,17 +165,15 @@ export function Enquiry() {
 
                 if (!name || !date || !area || !details) return;
 
-                // Detect which submit button was clicked
                 const native = e.nativeEvent as SubmitEvent;
                 const submitter = native.submitter as HTMLButtonElement | null;
                 const channel = submitter?.value ?? "whatsapp";
 
                 if (channel === "email") {
-                  const url = buildEmailUrl({ to: EMAIL_TO, name, date, area, details });
-                  // mailto: works best via location
+                  const url = buildEmailUrl({ to: emailTo, name, date, area, details, sourceLabel });
                   window.location.href = url;
                 } else {
-                  const url = buildWhatsAppUrl({ number: WHATSAPP_NUMBER, name, date, area, details });
+                  const url = buildWhatsAppUrl({ number: whatsappNumber, name, date, area, details, sourceLabel });
                   window.open(url, "_blank", "noopener,noreferrer");
                 }
 
@@ -179,6 +202,7 @@ export function Enquiry() {
                   className="w-full rounded-2xl border border-line bg-paper px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand/25"
                   placeholder="Postcode / area"
                   name="area"
+                  defaultValue={presetArea}
                   required
                 />
 
